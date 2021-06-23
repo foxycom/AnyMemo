@@ -56,8 +56,8 @@ android {
             applicationId "org.liberty.android.fantastischmemodev"
             dimension "mode"
         }
-        api21 {
-            minSdkVersion 21
+        api23 {
+            minSdkVersion 23
             dimension "api"
         }
         api16 {
