@@ -1,0 +1,7 @@
+[MakeConfiguration]
+make_app_package = org.liberty.android.fantastischmemo
+make_original_apk_path = app/build/outputs/apk/devApi23/debug/AnyMemo-dev-api23-debug.apk
+make_android_test_apk_path = app/build/outputs/apk/androidTest/devApi23/debug/AnyMemo-dev-api23-debug-androidTest.apk
+make_assemble_apk_command = assembleDebug
+make_assemble_android_test_command = assembleAndroidTest
+make_test_runner = org.liberty.android.fantastischmemo.test/androidx.test.runner.AndroidJUnitRunner
