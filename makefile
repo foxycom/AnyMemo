@@ -95,7 +95,9 @@ $(ESPRESSO_TESTS) : app-androidTest.apk app-instrumented.apk
 	else \
 	 	echo "Installing instrumented apk" ;\
 		export ABC_CONFIG=$(ABC_CFG) && $(ABC) install-apk app-instrumented.apk; \
-		echo "Installing test apk" ;\
+		$(ADB) shell pm grant org.liberty.android.fantastischmemodev android.permission.READ_EXTERNAL_STORAGE;\
+$(ADB) shell pm grant org.liberty.android.fantastischmemodev android.permission.WRITE_EXTERNAL_STORAGE;\
+echo "Installing test apk" ;\
 		export ABC_CONFIG=$(ABC_CFG) && $(ABC) install-apk app-androidTest.apk; \
 	fi
 #	Evalualte the current test name. Note that test names use #
