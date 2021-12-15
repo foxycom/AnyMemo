@@ -46,6 +46,7 @@ clean-all :
 # Clean up Coverage
 	$(RM) -rv espresso-tests-coverage unit-tests-coverage carved-test-coverage
 	$(RM) -rv espresso-test-coverage-for-*
+	$(RM) -rv jacoco-espresso-coverage
 
 # Build the various apks
 app-original.apk : 
@@ -87,10 +88,10 @@ $(ESPRESSO_TESTS) : app-androidTest.apk app-instrumented.apk
 		export ABC_CONFIG=$(ABC_CFG) && $(ABC) start-clean-emulator; \
 	fi
 
-	$(eval FIRST_RUN := $(shell $(ADB) shell pm list packages | grep -c org.liberty.android.fantastischmemo))
+	$(eval FIRST_RUN := $(shell $(ADB) shell pm list packages | grep -c org.liberty.android.fantastischmemodev))
 	@if [ "$(FIRST_RUN)" == "2" ]; then \
 		echo "Resetting the data of the apk"; \
-		$(ADB) shell pm clear org.liberty.android.fantastischmemo; \
+		$(ADB) shell pm clear org.liberty.android.fantastischmemodev; \
 	else \
 	 	echo "Installing instrumented apk" ;\
 		export ABC_CONFIG=$(ABC_CFG) && $(ABC) install-apk app-instrumented.apk; \
@@ -103,7 +104,7 @@ $(ESPRESSO_TESTS) : app-androidTest.apk app-instrumented.apk
 #	Log directly to the expected file
 	$(ADB) shell am instrument -w -e class $(TEST_NAME) org.liberty.android.fantastischmemo.test/androidx.test.runner.AndroidJUnitRunner 2>&1 | tee $(@)
 #	Copy the traces if the previous command succeded
-	export ABC_CONFIG=$(ABC_CFG) && $(ABC) copy-traces org.liberty.android.fantastischmemo ./traces/$(TEST_NAME) force-clean
+	export ABC_CONFIG=$(ABC_CFG) && $(ABC) copy-traces org.liberty.android.fantastischmemodev ./traces/$(TEST_NAME) force-clean
 
 # Carving all requires to have all of them traced
 # This will always run because it's a phony target
@@ -156,20 +157,23 @@ $(ESPRESSO_TESTS_COVERAGE):
 	$(eval TEST_NAME := $(shell echo "$(@)" | sed -e 's|__|\\\#|g' -e 's|/html/index.html||' -e 's|espresso-test-coverage-for-||'))
 	$(eval COVERAGE_FOLDER := $(shell echo "$(@)" | sed -e 's|/html/index.html||'))
 # Ensure we clean up stuff before running each test
-	$(eval FIRST_RUN := $(shell $(ADB) shell pm list packages | grep -c org.liberty.android.fantastischmemo))
+	$(eval FIRST_RUN := $(shell $(ADB) shell pm list packages | grep -c org.liberty.android.fantastischmemodev))
 	@if [ "$(FIRST_RUN)" == "2" ]; then \
 		echo "Resetting the data of the apk"; \
-		$(ADB) shell pm clear org.liberty.android.fantastischmemo; \
+		$(ADB) shell pm clear org.liberty.android.fantastischmemodev; \
 	fi
 # Execute the gradle target
 	@echo "Running Test $(TEST_NAME)"
 	$(GW) -PjacocoEnabled=true -PcarvedTests=false -Pandroid.testInstrumentationRunnerArguments.class=$(TEST_NAME) jacocoGUITestCoverage
 	mv -v app/build/reports/jacoco/jacocoGUITestCoverage $(COVERAGE_FOLDER)
+	mv -v app/build/outputs/code_coverage/debugAndroidTest/connected/*coverage.ec $(COVERAGE_FOLDER)/$(TEST_NAME).ec
 	
 # Phony  target
 coverage-for-each-espresso-test :  $(ESPRESSO_TESTS_COVERAGE)
 	@echo "Processing: $(shell echo $? | tr " " "\n")"
 	export ABC_CONFIG=$(ABC_CFG) && $(ABC) stop-all-emulators
+	mkdir -p jacoco-espresso-coverage
+	find espresso-test-coverage-* -type f -name "*.ec" -exec cp '{}' jacoco-espresso-coverage/ ';'
 	@echo "Done"
 
 
