@@ -1,4 +1,3 @@
-org.liberty.android.fantastischmemo.integrationtest.AnyMemoActivityTest testOpenActivityWithSampleDB
 org.liberty.android.fantastischmemo.test.converter.CsvExporterTest testConvert
 org.liberty.android.fantastischmemo.test.converter.ImportMergingTest testMergeQATxtIntoDb
 org.liberty.android.fantastischmemo.test.converter.ImportMergingTest testMergeCsvIntoDb
