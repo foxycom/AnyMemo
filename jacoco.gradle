@@ -81,7 +81,7 @@ task jacocoUnitTestCoverage(type: JacocoReport, dependsOn: ['testDevApi23DebugUn
     }
     def fileFilter = ['**/R.class', '**/BuildConfig.class', '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
     def coverageSourceDirs = ["${project.projectDir}/src/main/java"]
-    getClassDirectories().setFrom(fileTree(dir: "${buildDir}/intermediates/javac/debug/classes", excludes: fileFilter))
+    getClassDirectories().setFrom(fileTree(dir: "${buildDir}/intermediates/javac/devApi23Debug/classes", excludes: fileFilter))
     getSourceDirectories().setFrom(files(coverageSourceDirs))
 
     getExecutionData().setFrom(fileTree(
@@ -104,11 +104,11 @@ task jacocoGUITestCoverage(type: JacocoReport, dependsOn: ['connectedDevApi23Deb
     }
     def fileFilter = ['**/R.class', '**/BuildConfig.class', '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
     def coverageSourceDirs = ["${project.projectDir}/src/main/java"]
-    getClassDirectories().setFrom(fileTree(dir: "${buildDir}/intermediates/javac/debug/classes", excludes: fileFilter))
+    getClassDirectories().setFrom(fileTree(dir: "${buildDir}/intermediates/javac/devApi23Debug/classes", excludes: fileFilter))
     getSourceDirectories().setFrom(files(coverageSourceDirs))
 
     getExecutionData().setFrom(fileTree(
             dir: "${buildDir}",
-            include: ['outputs/code_coverage/debugAndroidTest/connected/*coverage.ec']
+            include: ['outputs/code_coverage/devApi23DebugAndroidTest/connected/*coverage.ec']
     ))
 }
